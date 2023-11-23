@@ -152,3 +152,4 @@ References:
 - https://github.com/tigera/ccol1/tree/main
 - https://github.com/k3s-io/k3s
 - https://github.com/sadieleob/k3s-multipass
+- https://metallb.universe.tf/
