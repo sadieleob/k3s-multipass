@@ -84,7 +84,7 @@ worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
 worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
 ```
 
-**Installing Metal-LB**
+**Installing Metal-LB**\n
 Metal-LB is has to be installed to provide LoadBalancer-type Kubernetes services, please refer to [Metal-LB documentation](https://metallb.universe.tf/) for additional details.
 
 ```
