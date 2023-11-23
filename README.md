@@ -1,6 +1,8 @@
-This project was motivated by my desire to explore various CNI projects for Kubernetes, such as Istio, Cillium, Calico, and more. I had previously been engaged with Tigera's project; however, it deployed an outdated version of K3s (v1.18.10+k3s1). Consequently, I made the decision to enhance the cloud-init scripts to deploy the latest version of K3s.
+This project originated from my desire to experiment with various Container Network Interface (CNI) projects for Kubernetes, such as Istio, Cilium, Calico, and others. The intention was to carry out these experiments on my personal Linux/Ubuntu workstation, eliminating the need for deployment on a cloud provider or a Homelab, which tends to consume a considerable amount of energy.
 
-In summary, the primary goal of this project is to establish a Lightweight Kubernetes cluster (K3s) on Ubuntu VMs, leveraging the multipass tool.
+Previously, I had been utilizing a project by Tigera, but it deployed an outdated K3s version (v1.18.10+k3s1). Consequently, I made the decision to update the cloud-init scripts to facilitate the deployment of a more recent K3s version.
+
+In essence, the primary goal of this project is to establish a Lightweight Kubernetes cluster (K3s) on Ubuntu virtual machines launched through multipass.
 
 These steps have undergone thorough testing in an environment meeting the following conditions:
 ```
