@@ -75,6 +75,15 @@ spec:
 EOF
 ```
 
+Up to this point, we should have a K3s cluster with 1 control-plane and 2 worker nodes in READY status:
+```
+kubectl get nodes
+NAME           STATUS   ROLES                  AGE   VERSION
+master-k8s     Ready    control-plane,master   98m   v1.25.13+k3s1
+worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
+worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
+```
+
 To be continued ....
 
 References:
