@@ -50,6 +50,10 @@ SSH into host1 and confirm that Kubernetes components have been updated:
 ```
 multipass shell host1
 kubectl get nodes
+NAME           STATUS   ROLES                  AGE   VERSION
+master-k8s     Ready    control-plane,master   98m   v1.25.13+k3s1
+worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
+worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
 ```
 
 Installing Calico:
