@@ -10,14 +10,14 @@ multipass 1.22.2
 ```
 [This is the original](https://github.com/tigera/ccol1/tree/main) repo hosting the project. This project deploys a K3s Kubernetes cluster with the following versions:  
 ```
-Calico v3.21.4
+Calico and calicoctl v3.21.4
 Kubectl 1.19.2
 K3s v1.18.10+k3s1
 ```
 
 In my project, the components have been updated to:
 ```
-calicoctl v3.25.2
+Calico and calicoctl v3.25.2
 Kubectl 1.25.0
 K3s v1.25.13+k3s1
 ```
@@ -27,13 +27,14 @@ let's now focus on how to deploy the cluster.
 
 Steps to create the K3S cluster:
 
-Clone the repo: 
+Clone the repository: 
 ```
 > git clone https://github.com/sadieleob/k3s-multipass.git
 ```
+
 Create the VMs with multipass, cloud-init will bootstrap the node and install Kubernetes components:
 ```
-> sudo multipass launch -n master-k8s -m 2048M 20.04 --cloud-init ./control-init.yaml
+sudo multipass launch -n master-k8s -m 2048M 20.04 --cloud-init ./control-init.yaml
 sudo multipass launch -n worker-1-k8s 20.04 --cloud-init ./node1-init.yaml
 sudo multipass launch -n worker-2-k8s 20.04 --cloud-init ./node2-init.yaml
 sudo multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
@@ -52,19 +53,20 @@ kubectl get nodes
 
 Installing Calico:
 ```
-> kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.2/manifests/tigera-operator.yaml
-> cat <<EOF | kubectl apply -f -
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.2/manifests/tigera-operator.yaml
+
+cat <<EOF | kubectl apply -f -
 apiVersion: operator.tigera.io/v1
 kind: Installation
 metadata:
- name: default
+  name: default
 spec:
- calicoNetwork:
- containerIPForwarding: Enabled
- ipPools:
- - cidr: 198.19.16.0/21
- natOutgoing: Enabled
- encapsulation: None
+  calicoNetwork:
+  containerIPForwarding: Enabled
+  ipPools:
+   - cidr: 198.19.16.0/21
+     natOutgoing: Enabled
+     encapsulation: None
 EOF
 ```
 
