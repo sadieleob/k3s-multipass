@@ -1,9 +1,8 @@
-This project was motivated by my need of playing with different CNI projects for Kubernetes (Istio, Cillium, Calico, etc).
-Previously I had been working with the following Tigera's project but it deploys an old K3s version (v1.18.10+k3s1), so I decided to update the cloud-init scripts to deploy new K3s version. 
+This project was motivated by my desire to explore various CNI projects for Kubernetes, such as Istio, Cillium, Calico, and more. I had previously been engaged with Tigera's project; however, it deployed an outdated version of K3s (v1.18.10+k3s1). Consequently, I made the decision to enhance the cloud-init scripts to deploy the latest version of K3s.
 
-In summary, the purpose of this project is to deploy a Lightweight Kubernetes cluster (K3s) on top of Ubuntu VMs launched with multipass.
+In summary, the primary goal of this project is to establish a Lightweight Kubernetes cluster (K3s) on Ubuntu VMs, leveraging the multipass tool.
 
-The steps have been tested in an environment with the following conditions:
+These steps have undergone thorough testing in an environment meeting the following conditions:
 ```
 OS/Kernel versions: Linux 6.2.0-36-generic #37~22.04.1-Ubuntu
 multipass 1.22.2
@@ -29,7 +28,7 @@ Steps to create the K3S cluster:
 
 Clone the repository: 
 ```
-> git clone https://github.com/sadieleob/k3s-multipass.git
+git clone https://github.com/sadieleob/k3s-multipass.git
 ```
 
 Create the VMs with multipass, cloud-init will bootstrap the node and install Kubernetes components:
