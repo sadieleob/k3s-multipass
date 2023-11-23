@@ -150,7 +150,5 @@ Enjoy playing with ISTIO!
 References:
 
 [1] https://github.com/tigera/ccol1/tree/main
-
 [2] https://github.com/k3s-io/k3s
-
 [3] https://github.com/sadieleob/k3s-multipass
