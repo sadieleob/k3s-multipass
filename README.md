@@ -46,14 +46,15 @@ sudo multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
 "error loading cloud-init config: bad file"
 ```
 
-SSH into host1 and confirm that the nodes were created and Kubernetes components were installed. However, please note that no CNI plugin has been installed yet, so it is expected that the nodes appear as NOT READY:
+SSH into host1 and confirm that the nodes were created and Kubernetes components were installed. However, please note that no CNI plugin has been installed yet, so it is expected that the nodes appear as **NotReady**:
 ```
 multipass shell host1
-kubectl get nodes
-NAME           STATUS   ROLES                  AGE   VERSION
-master-k8s     Ready    control-plane,master   98m   v1.25.13+k3s1
-worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
-worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
+
+kubectl get node
+NAME           STATUS     ROLES                  AGE   VERSION
+master-k8s     NotReady   control-plane,master   18m   v1.25.13+k3s1
+worker-1-k8s   NotReady   <none>                 17m   v1.25.13+k3s1
+worker-2-k8s   NotReady   <none>                 16m   v1.25.13+k3s1
 ```
 
 **Installing Calico**
@@ -84,7 +85,8 @@ worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
 worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
 ```
 
-**Installing Metal-LB**\n
+**Installing Metal-LB**
+
 Metal-LB is has to be installed to provide LoadBalancer-type Kubernetes services, please refer to [Metal-LB documentation](https://metallb.universe.tf/) for additional details.
 
 ```
@@ -98,15 +100,30 @@ cat <<EOF | kubectl apply -f -
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: production
+  name: homelab
   namespace: metallb-system
 spec:
   addresses:
-  - 10.78.117.100-10.78.117.200
+  - IP_ADDRESS_RANGE <Example: 10.78.117.100-10.78.117.200>
 EOF
 ```
 
+**NOTE**: VMs are launched using a network bridge, in my case multipass is launching VMs in the network CIDR 10.78.117.0/24, so I have to choose an IP address pool for Metal-LB in that range. You can check the Multipass network by looking at the bridge interface
+ 
+```
+ifconfig mpqemubr0  
+mpqemubr0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.78.117.1  netmask 255.255.255.0  broadcast 10.78.117.255
+        inet6 fe80::5054:ff:febb:c35f  prefixlen 64  scopeid 0x20<link>
+        ether 52:54:00:bb:c3:5f  txqueuelen 1000  (Ethernet)
+        RX packets 3813204  bytes 313282035 (313.2 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 11715607  bytes 14788240603 (14.7 GB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
 **Installing Istio Service Mesh 1.17.2**
+
 
 References:
 [1] https://github.com/tigera/ccol1/tree/main
