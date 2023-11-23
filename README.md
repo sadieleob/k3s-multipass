@@ -35,10 +35,10 @@ git clone https://github.com/sadieleob/k3s-multipass.git
 
 2. Create the VMs with multipass, cloud-init will bootstrap the node and install Kubernetes components:
 ```
-sudo multipass launch -n master-k8s -m 2048M 20.04 --cloud-init ./control-init.yaml
-sudo multipass launch -n worker-1-k8s 20.04 --cloud-init ./node1-init.yaml
-sudo multipass launch -n worker-2-k8s 20.04 --cloud-init ./node2-init.yaml
-sudo multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
+multipass launch -n master-k8s -m 2048M 20.04 --cloud-init ./control-init.yaml
+multipass launch -n worker-1-k8s 20.04 --cloud-init ./node1-init.yaml
+multipass launch -n worker-2-k8s 20.04 --cloud-init ./node2-init.yaml
+multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
 ```
 
 **NOTE**: Please make sure to place the cloud-init files in your home directory because snap confinement could deny access to the files and you could hit the following error:
@@ -48,6 +48,13 @@ sudo multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
 
 SSH into host1 and confirm that the nodes were created and Kubernetes components were installed. However, please note that no CNI plugin has been installed yet, so it is expected that the nodes appear as **NotReady**:
 ```
+multipass list 
+Name                    State             IPv4             Image
+host1                   Running           10.78.117.178    Ubuntu 20.04 LTS
+master-k8s              Running           10.78.117.95     Ubuntu 20.04 LTS
+worker-1-k8s            Running           10.78.117.100    Ubuntu 20.04 LTS
+worker-2-k8s            Running           10.78.117.208    Ubuntu 20.04 LTS
+
 multipass shell host1
 
 kubectl get node
@@ -108,7 +115,7 @@ spec:
 EOF
 ```
 
-**NOTE**: VMs are launched using a network bridge, in my case multipass is launching VMs in the network CIDR 10.78.117.0/24, so I have to choose an IP address pool for Metal-LB in that range. You can check the Multipass network by looking at the bridge interface
+**NOTE**: In my case, multipass is using the qemu driver, and the bridge interface created to enable the VM network is mpqemubr0 with a CIDR 10.78.117.0/24, so I have to choose an IP address pool for Metal-LB in that range. You can check the Multipass network by looking at the bridge's interface:
  
 ```
 ifconfig mpqemubr0  
@@ -124,6 +131,21 @@ mpqemubr0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 
 **Installing Istio Service Mesh 1.17.2**
 
+1. Download the istio binary:
+```
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.17.2 sh -
+``` 
+2. Copy the istioctl binary to the /usr/local/bin and install the istio DEMO profile:
+```
+cd istio-1.17.2/bin/
+sudo cp istioctl /usr/local/bin/
+istioctl version
+istioctl x precheck <Optional>
+istioctl profile list  <Optional>
+istioctl install --set profile=demo
+```
+
+Enjoy playing with ISTIO!
 
 References:
 [1] https://github.com/tigera/ccol1/tree/main
