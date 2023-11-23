@@ -46,7 +46,7 @@ sudo multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
 "error loading cloud-init config: bad file"
 ```
 
-SSH into host1 and confirm that Kubernetes components have been updated: 
+SSH into host1 and confirm that the nodes were created and Kubernetes components were installed. However, please note that no CNI plugin has been installed yet, so it is expected that the nodes appear as NOT READY:
 ```
 multipass shell host1
 kubectl get nodes
