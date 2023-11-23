@@ -26,14 +26,14 @@ K3s v1.25.13+k3s1
 In case a new version is required, the user must updated the cloud-init files passed to multipass to bootstrap the VMs, more about this below, 
 let's now focus on how to deploy the cluster.
 
-Steps to create the K3S cluster:
+**Steps to create the K3S cluster**
 
-Clone the repository: 
+1. Clone the repository: 
 ```
 git clone https://github.com/sadieleob/k3s-multipass.git
 ```
 
-Create the VMs with multipass, cloud-init will bootstrap the node and install Kubernetes components:
+2. Create the VMs with multipass, cloud-init will bootstrap the node and install Kubernetes components:
 ```
 sudo multipass launch -n master-k8s -m 2048M 20.04 --cloud-init ./control-init.yaml
 sudo multipass launch -n worker-1-k8s 20.04 --cloud-init ./node1-init.yaml
@@ -56,7 +56,7 @@ worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
 worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
 ```
 
-Installing Calico:
+**Installing Calico**
 ```
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.2/manifests/tigera-operator.yaml
 
@@ -84,7 +84,29 @@ worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
 worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
 ```
 
-To be continued ....
+**Installing Metal-LB**
+Metal-LB is has to be installed to provide LoadBalancer-type Kubernetes services, please refer to [Metal-LB documentation](https://metallb.universe.tf/) for additional details.
+
+```
+MetalLB_RTAG=$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest|grep tag_name|cut -d '"' -f 4|sed 's/v//')
+
+wget https://raw.githubusercontent.com/metallb/metallb/v$MetalLB_RTAG/config/manifests/metallb-native.yaml
+
+kubectl apply -f metallb-native.yaml
+
+cat <<EOF | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: production
+  namespace: metallb-system
+spec:
+  addresses:
+  - 10.78.117.100-10.78.117.200
+EOF
+```
+
+**Installing Istio Service Mesh 1.17.2**
 
 References:
 [1] https://github.com/tigera/ccol1/tree/main
