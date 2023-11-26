@@ -21,11 +21,10 @@ In my project, the components have been updated to:
 Calico and calicoctl v3.25.2
 Kubectl 1.25.0
 K3s v1.25.13+k3s1
-K3s server is launched with servicelb (Klipper) and traefik disabled becaused we will use Metal-LB. 
+K3s server is launched with ServiceLB enabled and traefik disabled. 
 ```
 
-In case a new version is required, the user must updated the cloud-init files passed to multipass to bootstrap the VMs, more about this below, 
-let's now focus on how to deploy the cluster.
+In case a new version is required, the user must updated the cloud-init files passed to multipass to bootstrap the VMs, more about this below, let's now focus on how to deploy the cluster.
 
 **Steps to create the K3S cluster**
 
@@ -93,43 +92,10 @@ worker-1-k8s   Ready    <none>                 97m   v1.25.13+k3s1
 worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
 ```
 
-**Installing Metal-LB**
+**Load Balancer Implementation**
 
-Metal-LB is has to be installed to provide LoadBalancer-type Kubernetes services, please refer to [Metal-LB documentation](https://metallb.universe.tf/) for additional details.
-
-```
-MetalLB_RTAG=$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest|grep tag_name|cut -d '"' -f 4|sed 's/v//')
-
-wget https://raw.githubusercontent.com/metallb/metallb/v$MetalLB_RTAG/config/manifests/metallb-native.yaml
-
-kubectl apply -f metallb-native.yaml
-
-cat <<EOF | kubectl apply -f -
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: homelab
-  namespace: metallb-system
-spec:
-  addresses:
-  - IP_ADDRESS_RANGE <Example: 10.78.117.100-10.78.117.200>
-EOF
-```
-
-**NOTE**: In my case, multipass is using the qemu driver, and the bridge interface created to enable the VM network is mpqemubr0 with a CIDR 10.78.117.0/24, so I have to choose an IP address pool for Metal-LB in that range. You can check the Multipass network by looking at the bridge's interface:
- 
-```
-ifconfig mpqemubr0  
-mpqemubr0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.78.117.1  netmask 255.255.255.0  broadcast 10.78.117.255
-        inet6 fe80::5054:ff:febb:c35f  prefixlen 64  scopeid 0x20<link>
-        ether 52:54:00:bb:c3:5f  txqueuelen 1000  (Ethernet)
-        RX packets 3813204  bytes 313282035 (313.2 MB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 11715607  bytes 14788240603 (14.7 GB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-```
-
+The defautl [***ServiceLB***](https://docs.k3s.io/networking#service-load-balancer) Load Balancer is being used, as we hit several issues with Calico 3.21 not being compatible with Metal-LB as describe [here](https://metallb.universe.tf/configuration/calico/).
+  
 **Installing Istio Service Mesh 1.17.2**
 
 1. Download the istio binary:
