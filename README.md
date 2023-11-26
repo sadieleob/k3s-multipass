@@ -21,6 +21,7 @@ In my project, the components have been updated to:
 Calico and calicoctl v3.25.2
 Kubectl 1.25.0
 K3s v1.25.13+k3s1
+K3s server is launched with servicelb (Klipper) and traefik disabled becaused we will use Metal-LB. 
 ```
 
 In case a new version is required, the user must updated the cloud-init files passed to multipass to bootstrap the VMs, more about this below, 
@@ -153,3 +154,4 @@ References:
 - https://github.com/k3s-io/k3s
 - https://github.com/sadieleob/k3s-multipass
 - https://metallb.universe.tf/
+- https://metallb.universe.tf/configuration/k3s/
