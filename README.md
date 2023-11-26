@@ -94,7 +94,7 @@ worker-2-k8s   Ready    <none>                 96m   v1.25.13+k3s1
 
 **Load Balancer Implementation**
 
-The defautl [***ServiceLB***](https://docs.k3s.io/networking#service-load-balancer) Load Balancer is being used, as we hit several issues with Calico 3.21 not being compatible with Metal-LB as described [here](https://metallb.universe.tf/configuration/calico/).
+The defautl [***ServiceLB***](https://docs.k3s.io/networking#service-load-balancer) Load Balancer is being used, as we hit several issues with Calico 3.21 not being compatible with Metal-LB as described [here](https://metallb.universe.tf/configuration/calico/). For further details on how ServiceLB works please refer to the [documentation](https://docs.k3s.io/networking#how-servicelb-works). 
   
 **Installing Istio Service Mesh 1.17.2**
 
@@ -121,3 +121,4 @@ References:
 - https://github.com/sadieleob/k3s-multipass
 - https://metallb.universe.tf/
 - https://metallb.universe.tf/configuration/k3s/
+- https://docs.k3s.io/networking#how-servicelb-works
