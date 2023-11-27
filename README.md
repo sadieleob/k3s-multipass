@@ -41,11 +41,10 @@ multipass launch -n worker-2-k8s 20.04 --cloud-init ./node2-init.yaml
 multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
 ```
 
-**NOTE**: Please make sure to place the cloud-init files in your home directory because snap confinement could deny access to the files and you could hit the following error:
+**NOTE**: Please make sure to place the cloud-init files in your home directory because [snap confinement](https://github.com/canonical/multipass/issues/2725) could deny access to the files and you could hit the following error:
 ```
 "error loading cloud-init config: bad file"
 ```
-
 SSH into host1 and confirm that the nodes were created and Kubernetes components were installed. However, please note that no CNI plugin has been installed yet, so it is expected that the nodes appear as **NotReady**:
 ```
 multipass list 
