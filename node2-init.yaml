@@ -37,7 +37,7 @@ write_files:
   owner: root:root
   path: /etc/skel/.bash_aliases
 - encoding: b64
-  content: CjE5OC4xOS4wLjEgY29udHJvbAoxOTguMTkuMC4yIG5vZGUxCjE5OC4xOS4wLjMgbm9kZTIKMTk4LjE5LjE1LjI1NCBob3N0MQoK
+  content: CjE5OC4xOS4wLjEgY29udHJvbAoxOTguMTkuMC4yIG5vZGUxCjE5OC4xOS4wLjMgbm9kZTIKMTk4LjE5LjAuNCBub2RlMwoxOTguMTkuMTUuMjU0IGhvc3QxCgo=
   owner: root:root
   path: /etc/cloud/templates/hosts.debian.tmpl
   append: true
