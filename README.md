@@ -41,7 +41,7 @@ multipass launch -n worker-2-k8s 20.04 --cloud-init ./node2-init.yaml
 multipass launch -n host1 20.04 --cloud-init ./host1-init.yaml
 ```
 
-2.1 Adding more nodes to the cluster:
+3. Adding more nodes to the cluster:
 - Copy node3-init.yaml and change the following files: /etc/dynamicaddress.sh and /etc/cloud/templates/hosts.debian.tmpl
 - In /etc/dynamicaddress.sh update the ip address: "printf 'network:\n  ethernets:\n    %s:\n      addresses: [ 198.19.0.4/20 ]\n  version: 2' $IFACE | tee /etc/netplan/51-static.yaml"
 - In /etc/cloud/templates/hosts.debian.tmpl add the new node to the /etc/hosts
